@@ -67,5 +67,6 @@ async def kyb_sreening_node(state:AssessmentGraphState) -> dict:
 
     return {
         "kyb_status":kyb_status,
-        "message": [AIMessage(content=summary)]
+        "watchlist_flags": watch_list,
+        "messages": [AIMessage(content=summary)]
     }

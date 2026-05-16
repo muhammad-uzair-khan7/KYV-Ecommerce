@@ -44,7 +44,8 @@ async def human_review_queue_node(state: AssessmentGraphState) -> dict:
 
     # Write to the compliance_review_queue table in PostgreSQL
     try:
-        conn = await asyncpg.connect(os.getenv("DATABASE_URL"))
+        db_url = os.getenv("DATABASE_URL", "").replace("postgresql+asyncpg://", "postgresql://")
+        conn = await asyncpg.connect(db_url)
         await conn.execute("""
             INSERT INTO compliance_review_queue 
                 (vendor_id, tenant_id, company_name, residual_risk_score, 

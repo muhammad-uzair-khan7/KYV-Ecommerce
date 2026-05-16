@@ -20,7 +20,7 @@ def orchestration_supervisor(state: AssessmentGraphState):
         return {"next_action_node": "KYBScreening"}
     if state.get("kyb_status") == "CLEAN" and not state.get("parsed_contracts"):
         return {"next_action_node": "ContractAnalysis"}
-    if state.get("kyb_status") is ("BLOCKED", "FLAGGED"):
+    if state.get("kyb_status") in ("BLOCKED", "FLAGGED"):
         return {"next_action_node": "HumanReview"}
     if state.get("parsed_contracts") and not state.get("computed_risk_vector"):
         return {"next_action_node": "RiskScoring"}

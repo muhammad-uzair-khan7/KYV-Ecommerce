@@ -1,2 +1,60 @@
-.venv
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Environment variables
 .env
+.env.local
+.env.*.local
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Pytest cache
+.pytest_cache/
+.cache/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# PyCharm
+.idea/
+
+# Jupyter notebooks checkpoints
+.ipynb_checkpoints/
+
+# Pinecone / vector store local data
+*.index
+*.faiss
+
+# Docker volumes (if generated locally)
+db_data_volume/
+elastic_data/
+n8n_storage_volume/
+
+# Coverage reports
+htmlcov/
+.coverage
+coverage.xml
+
+# MyPy
+.mypy_cache/
