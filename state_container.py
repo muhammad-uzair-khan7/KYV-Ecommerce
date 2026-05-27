@@ -17,6 +17,11 @@ class AssessmentGraphState(TypedDict):
     watchlist_flags: list[dict]
     computed_risk_vector: dict
     next_action_node: str
+<<<<<<< HEAD
+=======
+    _supervisor_loop_count: int
+    _contract_analysis_done: bool
+>>>>>>> 98e84e9 (JSON return and Yente dataset issue solved)
 
 class RoutingInstruction(BaseModel):
     selected_worker: Literal[

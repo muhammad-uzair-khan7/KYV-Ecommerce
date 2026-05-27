@@ -41,6 +41,7 @@ WEIGHT_PROFILES = {
 
 
 def _derive_domain_scores(state: AssessmentGraphState) -> dict[str, int]:
+<<<<<<< HEAD
     flags     = state.get("watchlist_flags", [])
     contracts = state.get("parsed_contracts", [])
 
@@ -48,6 +49,15 @@ def _derive_domain_scores(state: AssessmentGraphState) -> dict[str, int]:
     if any(f.get("is_sanctioned") for f in flags):
         compliance = 100
     elif any(f.get("is_pep") for f in flags):
+=======
+    flags     = state.get("watchlist_flags", []) or []
+    contracts = state.get("parsed_contracts", []) or []
+
+    # Compliance score — driven by KYB flags
+    if any(f.get("is_sanctioned") for f in flags if f is not None):
+        compliance = 100
+    elif any(f.get("is_pep") for f in flags if f is not None):
+>>>>>>> 98e84e9 (JSON return and Yente dataset issue solved)
         compliance = 65
     elif flags:
         compliance = 40
@@ -56,24 +66,46 @@ def _derive_domain_scores(state: AssessmentGraphState) -> dict[str, int]:
 
     # Cyber score — derived from contract signals (replace with UpGuard in prod)
     cyber = 10
+<<<<<<< HEAD
     if contracts:
         analysis = contracts[0].get("clause_analysis", {})
         if not analysis.get("data_processing_agreement"):
             cyber += 30
         if analysis.get("overall_contract_risk") == "HIGH":
             cyber += 20
+=======
+    if contracts and len(contracts) > 0:
+        contract = contracts[0]
+        if contract is not None:
+            analysis = contract.get("clause_analysis", {}) or {}
+            if not analysis.get("data_processing_agreement"):
+                cyber += 30
+            if analysis.get("overall_contract_risk") == "HIGH":
+                cyber += 20
+>>>>>>> 98e84e9 (JSON return and Yente dataset issue solved)
 
     # Financial — placeholder until Creditsafe feed is wired in
     financial = 15
 
     # Operational — derived from contract terms
     operational = 10
+<<<<<<< HEAD
     if contracts:
         analysis = contracts[0].get("clause_analysis", {})
         if not analysis.get("termination_for_convenience"):
             operational += 15
         if analysis.get("auto_renewal_clause"):
             operational += 10
+=======
+    if contracts and len(contracts) > 0:
+        contract = contracts[0]
+        if contract is not None:
+            analysis = contract.get("clause_analysis", {}) or {}
+            if not analysis.get("termination_for_convenience"):
+                operational += 15
+            if analysis.get("auto_renewal_clause"):
+                operational += 10
+>>>>>>> 98e84e9 (JSON return and Yente dataset issue solved)
 
     return {
         "cyber":       min(cyber, 100),
@@ -85,6 +117,7 @@ def _derive_domain_scores(state: AssessmentGraphState) -> dict[str, int]:
 
 def _derive_mitigations(state: AssessmentGraphState) -> list[dict]:
     mitigations = []
+<<<<<<< HEAD
     contracts   = state.get("parsed_contracts", [])
 
     if contracts:
@@ -95,12 +128,30 @@ def _derive_mitigations(state: AssessmentGraphState) -> list[dict]:
             mitigations.append({"name": "Liability cap",         "is_verified": True, "reduction_coefficient": 0.08})
         if analysis.get("governing_law"):
             mitigations.append({"name": "Governing law defined", "is_verified": True, "reduction_coefficient": 0.05})
+=======
+    contracts   = state.get("parsed_contracts", []) or []
+
+    if contracts and len(contracts) > 0:
+        contract = contracts[0]
+        if contract is not None:
+            analysis = contract.get("clause_analysis", {}) or {}
+            if analysis.get("data_processing_agreement"):
+                mitigations.append({"name": "DPA in place",          "is_verified": True, "reduction_coefficient": 0.10})
+            if analysis.get("liability_cap_found"):
+                mitigations.append({"name": "Liability cap",         "is_verified": True, "reduction_coefficient": 0.08})
+            if analysis.get("governing_law"):
+                mitigations.append({"name": "Governing law defined", "is_verified": True, "reduction_coefficient": 0.05})
+>>>>>>> 98e84e9 (JSON return and Yente dataset issue solved)
 
     return mitigations
 
 
 def risk_scoring_node(state: AssessmentGraphState) -> dict:
+<<<<<<< HEAD
     vendor_id    = state["vendor_id"]
+=======
+    vendor_id    = state.get("vendor_id", "UNKNOWN")
+>>>>>>> 98e84e9 (JSON return and Yente dataset issue solved)
     vendor_type  = state.get("vendor_type", "default")
     weights      = WEIGHT_PROFILES.get(vendor_type, WEIGHT_PROFILES["default"])
     domain_scores = _derive_domain_scores(state)
@@ -136,5 +187,11 @@ def risk_scoring_node(state: AssessmentGraphState) -> dict:
             f"Risk scoring complete for {vendor_id}. "
             f"Inherent: {scores['inherent_risk']} | Residual: {scores['residual_risk']}. "
             f"Classification: {label}."
+<<<<<<< HEAD
         )]
+=======
+        )],
+        "vendor_id": vendor_id,
+        "vendor_type": vendor_type
+>>>>>>> 98e84e9 (JSON return and Yente dataset issue solved)
     }
