@@ -1,11 +1,10 @@
-version: '3.8'
-
 services:
-  web:
-    build: .
+  app:
+    image: ghcr.io/opensanctions/yente:5.4.0
     ports:
-      - "8000:8000"
-    volumes:
-      - .:/app
+      - "127.0.0.1:7700:8000"
     environment:
-      - PYTHONUNBUFFERED=1
+      YENTE_INDEX_TYPE: "elasticsearch"
+      YENTE_INDEX_URL: "http://host.docker.internal:9200"
+      YENTE_MANIFEST: "/app/manifests/civic.yml"
+      OPENSANCTIONS_DELIVERY_TOKEN: "bulk_1a403dfd7d1829609a5e8ec00a5d45d7"
